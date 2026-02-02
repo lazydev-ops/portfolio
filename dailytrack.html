@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tracker 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .setup-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .setup-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .column-setup {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .column-input {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .column-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-bar {
+            background: #2c3e50;
+            padding: 15px 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            transform: scale(1.05);
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+        }
+
+        .month-section {
+            display: none;
+            padding: 30px;
+        }
+
+        .month-section.active {
+            display: block;
+        }
+
+        .month-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .month-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:first-child {
+            width: 80px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        td:first-child {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            background: #f8f9fa;
+            font-size: 16px;
+            min-width: 80px;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 40px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: none;
+            overflow: hidden;
+            font-family: inherit;
+            font-size: 13px;
+            transition: border-color 0.3s;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .save-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 176, 155, 0.4);
+            transition: all 0.3s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 176, 155, 0.5);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #00b09b;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            white-space: pre-line;
+            max-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .instruction {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .instruction p {
+            color: #1565c0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-bar {
+                padding: 10px;
+            }
+
+            .nav-btn {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 5px;
+                font-size: 12px;
+            }
+
+            textarea {
+                min-height: 50px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Daily Tracker 2026</h1>
+            <p>Track your daily progress throughout the year</p>
+        </div>
+
+        <div class="setup-section">
+            <h2>Setup Your Columns</h2>
+            <div class="instruction">
+                <p><strong>Instructions:</strong> Enter your column headings below (e.g., "Aim", "Achievements", "Notes", etc.). You can customize up to 7 columns. Then click "Generate Tracker" to create your annual tracker.</p>
+            </div>
+            <div class="column-setup">
+                <input type="text" class="column-input" placeholder="Column 1 (e.g., Aim)" value="Aim">
+                <input type="text" class="column-input" placeholder="Column 2 (e.g., Achievements)" value="Achievements">
+                <input type="text" class="column-input" placeholder="Column 3 (e.g., Notes)" value="Notes">
+                <input type="text" class="column-input" placeholder="Column 4" value="Lessons Learned">
+                <input type="text" class="column-input" placeholder="Column 5" value="Tomorrow's Goal">
+                <input type="text" class="column-input" placeholder="Column 6" value="Gratitude">
+                <input type="text" class="column-input" placeholder="Column 7" value="Mood">
+            </div>
+            <button class="btn btn-primary" onclick="generateTracker()">Generate Tracker</button>
+        </div>
+
+        <div class="nav-bar" id="navBar"></div>
+
+        <div id="monthsContainer"></div>
+    </div>
+
+    <button class="save-btn" onclick="saveData()">💾 Save Progress</button>
+    <div class="notification" id="notification"></div>
+
+    <script>
+        const months = [
+            { name: 'January', days: 31 },
+            { name: 'February', days: 29 }, // 2026 is not a leap year, but keeping 29 for safety
+            { name: 'March', days: 31 },
+            { name: 'April', days: 30 },
+            { name: 'May', days: 31 },
+            { name: 'June', days: 30 },
+            { name: 'July', days: 31 },
+            { name: 'August', days: 31 },
+            { name: 'September', days: 30 },
+            { name: 'October', days: 31 },
+            { name: 'November', days: 30 },
+            { name: 'December', days: 31 }
+        ];
+
+        // 2026 is not a leap year
+        months[1].days = 28;
+
+        let currentMonth = 0;
+        let columnHeaders = [];
+        let saveTimeout;
+
+        function autoSave() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveData(true);
+            }, 1000);
+        }
+
+        function generateTracker() {
+            // Get column headers
+            const inputs = document.querySelectorAll('.column-input');
+            columnHeaders = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(value => value !== '');
+
+            if (columnHeaders.length === 0) {
+                alert('Please enter at least one column heading!');
+                return;
+            }
+
+            // Generate navigation
+            generateNavigation();
+
+            // Generate all months
+            generateAllMonths();
+
+            // Show first month
+            showMonth(0);
+
+            // Load saved data
+            loadData();
+
+            showNotification('Tracker generated successfully!');
+        }
+
+        function generateNavigation() {
+            const navBar = document.getElementById('navBar');
+            navBar.innerHTML = '';
+
+            months.forEach((month, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'nav-btn';
+                btn.textContent = month.name;
+                btn.onclick = () => showMonth(index);
+                navBar.appendChild(btn);
+            });
+        }
+
+        function generateAllMonths() {
+            const container = document.getElementById('monthsContainer');
+            container.innerHTML = '';
+
+            months.forEach((month, monthIndex) => {
+                const section = document.createElement('div');
+                section.className = 'month-section';
+                section.id = `month-${monthIndex}`;
+
+                const header = document.createElement('div');
+                header.className = 'month-header';
+                header.innerHTML = `
+                    <h2>${month.name} 2026</h2>
+                    <p>${month.days} days</p>
+                `;
+
+                const tableWrapper = document.createElement('div');
+                tableWrapper.className = 'table-wrapper';
+
+                const table = document.createElement('table');
+                
+                // Create header row
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                
+                const dateHeader = document.createElement('th');
+                dateHeader.textContent = 'Date';
+                headerRow.appendChild(dateHeader);
+
+                columnHeaders.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Create body rows
+                const tbody = document.createElement('tbody');
+                
+                for (let day = 1; day <= month.days; day++) {
+                    const row = document.createElement('tr');
+                    
+                    const dateCell = document.createElement('td');
+                    const dateDiv = document.createElement('div');
+                    dateDiv.textContent = day;
+                    dateDiv.style.fontSize = '16px';
+                    dateDiv.style.fontWeight = 'bold';
+                    dateCell.appendChild(dateDiv);
+                    row.appendChild(dateCell);
+
+                    columnHeaders.forEach((header, colIndex) => {
+                        const cell = document.createElement('td');
+                        const textarea = document.createElement('textarea');
+                        textarea.id = `data-${monthIndex}-${day}-${colIndex}`;
+                        textarea.placeholder = `Enter ${header}...`;
+                        
+                        // Auto-expand textarea on input
+                        textarea.addEventListener('input', function() {
+                            this.style.height = 'auto';
+                            this.style.height = (this.scrollHeight) + 'px';
+                            autoSave();
+                        });
+                        
+                        // Set initial height
+                        textarea.style.height = '40px';
+                        
+                        cell.appendChild(textarea);
+                        row.appendChild(cell);
+                    });
+
+                    tbody.appendChild(row);
+                }
+
+                table.appendChild(tbody);
+                tableWrapper.appendChild(table);
+
+                section.appendChild(header);
+                section.appendChild(tableWrapper);
+                container.appendChild(section);
+            });
+        }
+
+        function showMonth(index) {
+            // Hide all months
+            const sections = document.querySelectorAll('.month-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Show selected month
+            document.getElementById(`month-${index}`).classList.add('active');
+
+            // Update navigation
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            currentMonth = index;
+        }
+
+        function saveData(isAutoSave = false) {
+            const data = {
+                columnHeaders: columnHeaders,
+                entries: {},
+                lastSaved: new Date().toISOString()
+            };
+
+            // Collect all textarea values
+            months.forEach((month, monthIndex) => {
+                for (let day = 1; day <= month.days; day++) {
+                    columnHeaders.forEach((header, colIndex) => {
+                        const textarea = document.getElementById(`data-${monthIndex}-${day}-${colIndex}`);
+                        if (textarea && textarea.value.trim() !== '') {
+                            const key = `${monthIndex}-${day}-${colIndex}`;
+                            data.entries[key] = textarea.value;
+                        }
+                    });
+                }
+            });
+
+            localStorage.setItem('dailyTracker2026', JSON.stringify(data));
+            
+            if (!isAutoSave) {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                showNotification(`Progress saved successfully! ✓\n${dateStr}`);
+            }
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('dailyTracker2026');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+                
+                // Restore entries
+                Object.keys(data.entries).forEach(key => {
+                    const textarea = document.getElementById(`data-${key}`);
+                    if (textarea) {
+                        textarea.value = data.entries[key];
+                        // Adjust height to fit content
+                        textarea.style.height = 'auto';
+                        textarea.style.height = (textarea.scrollHeight) + 'px';
+                    }
+                });
+
+                if (data.lastSaved) {
+                    const savedDate = new Date(data.lastSaved);
+                    const dateStr = savedDate.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    showNotification(`Previous data loaded! ✓\nLast saved: ${dateStr}`);
+                } else {
+                    showNotification('Previous data loaded! ✓');
+                }
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Save before leaving page
+        window.addEventListener('beforeunload', saveData);
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('dailyTracker2026');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.columnHeaders) {
+                        const inputs = document.querySelectorAll('.column-input');
+                        data.columnHeaders.forEach((header, index) => {
+                            if (inputs[index]) {
+                                inputs[index].value = header;
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error loading saved headers:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
